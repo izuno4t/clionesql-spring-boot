@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "node_modules",
+    "target",
+    ".mvn",
+    ".idea",
+    ".vscode",
+    "*.jar",
+    "*.class",
+    "mvnw",
+    "mvnw.cmd",
+    "package-lock.json"
+  ],
+  "words": [
+    "clione",
+    "clionesql",
+    "izuno",
+    "tetz",
+    "autoconfigure",
+    "datasource",
+    "sqlstate",
+    "jacoco",
+    "springframework"
+  ],
+  "flagWords": [],
+  "dictionaries": [
+    "java",
+    "xml"
+  ]
+}

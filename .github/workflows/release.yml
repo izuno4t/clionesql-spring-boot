@@ -1,0 +1,57 @@
+name: Release to Maven Central
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          server-id: central
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_TOKEN
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Install clione-sql to local Maven repository
+        run: |
+          curl -sL -o /tmp/clione-sql-0.5.1.jar \
+            "https://github.com/tauty/clione-sql/raw/master/clione-sql/clione-sql-0.5.1.jar"
+          mvn install:install-file \
+            -Dfile=/tmp/clione-sql-0.5.1.jar \
+            -DgroupId=tetz42 \
+            -DartifactId=clione-sql \
+            -Dversion=0.5.1 \
+            -Dpackaging=jar \
+            -q
+
+      - name: Set release version from tag
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          ./mvnw versions:set -DnewVersion="$VERSION" -q
+          ./mvnw versions:commit -q
+
+      - name: Deploy to Maven Central
+        run: |
+          ./mvnw clean deploy -Prelease -q
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
