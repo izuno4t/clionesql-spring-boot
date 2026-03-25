@@ -134,7 +134,7 @@ public class PersonService {
     @Transactional(readOnly = true)
     public List<ResultMap> findByName(String name) {
         return clioneSql
-                .useFile("sql/person/SelectByName.sql")
+                .useFile("person/SelectByName.sql")
                 .findAll(SQLManager.params("name", name));
     }
 }
@@ -181,13 +181,19 @@ Properties under the `clione-sql` prefix in
 | -------- | ------- | ----------- |
 | `exception-translation-enabled` | `true` | Enable exception translation |
 | `product-name` | *(auto)* | Passed to `SQLManager` |
+| `sql-file-prefix` | *(none)* | Prefix applied to `useFile(String)` paths |
 
-> **Note:** Other properties (`development-mode`,
-> `sql-file-encoding`, etc.) are defined in
-> `ClioneSqlProperties` for forward compatibility
-> but currently have no effect due to clione-sql's
-> `Config` class limitation.
-> Configure them via `clione.properties` instead.
+Example:
+
+```properties
+clione-sql.sql-file-prefix=sql
+```
+
+> **Note:** `sql-file-prefix` is applied by this
+> Spring Boot integration. Other properties such as
+> `development-mode` and `sql-file-encoding` still
+> depend on clione-sql's `Config` class and should
+> be configured via `clione.properties`.
 
 ## Exception Translation
 

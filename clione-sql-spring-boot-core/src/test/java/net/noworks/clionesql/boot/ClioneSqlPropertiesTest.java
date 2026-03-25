@@ -11,6 +11,7 @@ class ClioneSqlPropertiesTest {
         ClioneSqlProperties properties = new ClioneSqlProperties();
         assertThat(properties.getProductName()).isNull();
         assertThat(properties.getSqlFileEncoding()).isEqualTo("UTF-8");
+        assertThat(properties.getSqlFilePrefix()).isNull();
         assertThat(properties.isExceptionTranslationEnabled()).isTrue();
         assertThat(properties.isDevelopmentMode()).isFalse();
         assertThat(properties.getSqlFileCacheTime()).isZero();
@@ -26,6 +27,9 @@ class ClioneSqlPropertiesTest {
 
         properties.setSqlFileEncoding("Shift_JIS");
         assertThat(properties.getSqlFileEncoding()).isEqualTo("Shift_JIS");
+
+        properties.setSqlFilePrefix("sql");
+        assertThat(properties.getSqlFilePrefix()).isEqualTo("sql");
 
         properties.setExceptionTranslationEnabled(false);
         assertThat(properties.isExceptionTranslationEnabled()).isFalse();

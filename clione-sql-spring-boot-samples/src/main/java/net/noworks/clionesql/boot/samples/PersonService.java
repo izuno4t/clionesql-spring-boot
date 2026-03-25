@@ -42,7 +42,7 @@ public class PersonService {
      */
     @Transactional(readOnly = true)
     public List<ResultMap> findByName(String name) {
-        return clioneSql.useFile("sql/person/SelectByName.sql").findAll(SQLManager.params("name", name));
+        return clioneSql.useFile("person/SelectByName.sql").findAll(SQLManager.params("name", name));
     }
 
     /**
@@ -52,7 +52,7 @@ public class PersonService {
      */
     @Transactional(readOnly = true)
     public List<ResultMap> findAll() {
-        return clioneSql.useFile("sql/person/SelectAll.sql").findAll();
+        return clioneSql.useFile("person/SelectAll.sql").findAll();
     }
 
     /**
@@ -67,7 +67,7 @@ public class PersonService {
      */
     @Transactional
     public int updateStatus(int id, String status) {
-        return clioneSql.useFile("sql/person/UpdateStatus.sql").update(SQLManager.params("id", id).$("status", status));
+        return clioneSql.useFile("person/UpdateStatus.sql").update(SQLManager.params("id", id).$("status", status));
     }
 
     /**

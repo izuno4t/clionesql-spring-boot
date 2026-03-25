@@ -31,6 +31,13 @@ public class ClioneSqlProperties {
     private String sqlFileEncoding = "UTF-8";
 
     /**
+     * Optional classpath-relative prefix applied to {@link ClioneSqlTemplate#useFile(String)}. For example, when set to
+     * {@code "sql"}, callers can resolve {@code "person/SelectAll.sql"} to {@code "sql/person/SelectAll.sql"}. Defaults
+     * to {@code null}.
+     */
+    private String sqlFilePrefix;
+
+    /**
      * Whether to enable translation of clione-sql exceptions into Spring's
      * {@link org.springframework.dao.DataAccessException} hierarchy. Defaults to {@code true}.
      */
@@ -89,6 +96,25 @@ public class ClioneSqlProperties {
      */
     public void setSqlFileEncoding(String sqlFileEncoding) {
         this.sqlFileEncoding = sqlFileEncoding;
+    }
+
+    /**
+     * Returns the optional SQL file path prefix.
+     *
+     * @return the classpath-relative SQL file prefix, or {@code null} if not set
+     */
+    public String getSqlFilePrefix() {
+        return sqlFilePrefix;
+    }
+
+    /**
+     * Sets the optional SQL file path prefix.
+     *
+     * @param sqlFilePrefix
+     *            the classpath-relative SQL file prefix
+     */
+    public void setSqlFilePrefix(String sqlFilePrefix) {
+        this.sqlFilePrefix = sqlFilePrefix;
     }
 
     /**

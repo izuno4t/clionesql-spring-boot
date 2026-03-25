@@ -24,6 +24,7 @@ class ClioneSqlPropertiesTest {
             ClioneSqlProperties properties = context.getBean(ClioneSqlProperties.class);
             assertThat(properties.getProductName()).isNull();
             assertThat(properties.getSqlFileEncoding()).isEqualTo("UTF-8");
+            assertThat(properties.getSqlFilePrefix()).isNull();
             assertThat(properties.isExceptionTranslationEnabled()).isTrue();
             assertThat(properties.isDevelopmentMode()).isFalse();
             assertThat(properties.getSqlFileCacheTime()).isZero();
@@ -33,14 +34,14 @@ class ClioneSqlPropertiesTest {
 
     @Test
     void customValues() {
-        this.contextRunner
-                .withPropertyValues("clione-sql.product-name=postgres", "clione-sql.sql-file-encoding=Shift_JIS",
-                        "clione-sql.exception-translation-enabled=false", "clione-sql.development-mode=true",
-                        "clione-sql.sql-file-cache-time=5000", "clione-sql.entity-depth-limit=4")
-                .run(context -> {
+        this.contextRunner.withPropertyValues("clione-sql.product-name=postgres",
+                "clione-sql.sql-file-encoding=Shift_JIS", "clione-sql.sql-file-prefix=sql",
+                "clione-sql.exception-translation-enabled=false", "clione-sql.development-mode=true",
+                "clione-sql.sql-file-cache-time=5000", "clione-sql.entity-depth-limit=4").run(context -> {
                     ClioneSqlProperties properties = context.getBean(ClioneSqlProperties.class);
                     assertThat(properties.getProductName()).isEqualTo("postgres");
                     assertThat(properties.getSqlFileEncoding()).isEqualTo("Shift_JIS");
+                    assertThat(properties.getSqlFilePrefix()).isEqualTo("sql");
                     assertThat(properties.isExceptionTranslationEnabled()).isFalse();
                     assertThat(properties.isDevelopmentMode()).isTrue();
                     assertThat(properties.getSqlFileCacheTime()).isEqualTo(5000);

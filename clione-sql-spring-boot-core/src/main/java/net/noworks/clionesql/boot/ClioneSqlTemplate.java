@@ -26,7 +26,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
  *
  * <pre>
  * // Using an external SQL file
- * List&lt;ResultMap&gt; results = clioneSqlTemplate.useFile("sql/person/SelectAll.sql").findAll();
+ * List&lt;ResultMap&gt; results = clioneSqlTemplate.useFile("person/SelectAll.sql").findAll();
  *
  * // Using an inline SQL string (2Way SQL)
  * ResultMap result = clioneSqlTemplate.useSQL("SELECT * FROM person WHERE id = &#47;* id *&#47;'1'")
@@ -66,12 +66,13 @@ public class ClioneSqlTemplate {
      * Loads a 2Way SQL template from the specified file path on the classpath.
      *
      * @param sqlPath
-     *            the classpath-relative path to the SQL file (e.g. {@code "sql/person/SelectAll.sql"})
+     *            the classpath-relative path to the SQL file (e.g. {@code "person/SelectAll.sql"} when
+     *            {@code clione-sql.sql-file-prefix=sql})
      *
      * @return a {@link SQLExecutor} ready to bind parameters and execute the query
      */
     public SQLExecutor useFile(String sqlPath) {
-        return createSQLManager().useFile(sqlPath);
+        return createSQLManager().useFile(resolveSqlPath(sqlPath));
     }
 
     /**
@@ -112,5 +113,33 @@ public class ClioneSqlTemplate {
             return SQLManager.sqlManager(con, productName);
         }
         return SQLManager.sqlManager(con);
+    }
+
+    private String resolveSqlPath(String sqlPath) {
+        String prefix = normalizePath(properties.getSqlFilePrefix());
+        String path = normalizePath(sqlPath);
+        if (prefix == null || path == null || path.startsWith(prefix + "/") || path.equals(prefix)) {
+            return path;
+        }
+        return prefix + "/" + path;
+    }
+
+    private String normalizePath(String path) {
+        if (path == null) {
+            return null;
+        }
+        String normalized = path.trim();
+        if (normalized.isEmpty()) {
+            return null;
+        }
+        int start = 0;
+        int end = normalized.length();
+        while (start < end && normalized.charAt(start) == '/') {
+            start++;
+        }
+        while (end > start && normalized.charAt(end - 1) == '/') {
+            end--;
+        }
+        return normalized.substring(start, end);
     }
 }
